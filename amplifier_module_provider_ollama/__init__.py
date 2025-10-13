@@ -5,7 +5,6 @@ Integrates with local Ollama server for LLM completions.
 
 import logging
 import os
-from collections.abc import Callable
 from typing import Any
 
 from amplifier_core import ModuleCoordinator
@@ -217,7 +216,7 @@ class OllamaProvider:
                     # Ensure input is a dict (should already be from Ollama API)
                     input_dict = tc.arguments if isinstance(tc.arguments, dict) else {}
 
-                    content_blocks.append(ToolCallContent(id=tc.id, name=tc.tool, input=input_dict))
+                    content_blocks.append(ToolCallContent(id=tc.id, name=tc.tool, arguments=input_dict))
 
             return ProviderResponse(
                 content=content,
