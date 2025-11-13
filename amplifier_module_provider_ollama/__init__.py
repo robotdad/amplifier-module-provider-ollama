@@ -166,11 +166,9 @@ class OllamaProvider:
             await self.coordinator.hooks.emit(
                 "llm:request",
                 {
-                    "data": {
-                        "provider": "ollama",
-                        "model": model,
-                        "message_count": len(ollama_messages),
-                    }
+                    "provider": "ollama",
+                    "model": model,
+                    "message_count": len(ollama_messages),
                 },
             )
 
@@ -180,14 +178,12 @@ class OllamaProvider:
                     "llm:request:debug",
                     {
                         "lvl": "DEBUG",
-                        "data": {
-                            "provider": "ollama",
-                            "request": {
-                                "model": model,
-                                "messages": ollama_messages,
-                                "max_tokens": max_tokens,
-                                "temperature": temperature,
-                            },
+                        "provider": "ollama",
+                        "request": {
+                            "model": model,
+                            "messages": ollama_messages,
+                            "max_tokens": max_tokens,
+                            "temperature": temperature,
                         },
                     },
                 )
@@ -198,11 +194,9 @@ class OllamaProvider:
                 "llm:request:raw",
                 {
                     "lvl": "DEBUG",
-                    "data": {
-                        "provider": "ollama",
-                        "params": params,  # Complete params dict as-is
-                        "stream": stream,
-                    },
+                    "provider": "ollama",
+                    "params": params,  # Complete params dict as-is
+                    "stream": stream,
                 },
             )
 
@@ -218,10 +212,8 @@ class OllamaProvider:
                     "llm:response:raw",
                     {
                         "lvl": "DEBUG",
-                        "data": {
-                            "provider": "ollama",
-                            "response": response if not stream else "<streaming_response>",  # Can't capture iterator
-                        },
+                        "provider": "ollama",
+                        "response": response if not stream else "<streaming_response>",  # Can't capture iterator
                     },
                 )
 
@@ -298,11 +290,9 @@ class OllamaProvider:
                 await self.coordinator.hooks.emit(
                     "llm:response",
                     {
-                        "data": {
-                            "provider": "ollama",
-                            "model": model,
-                            "usage": usage,
-                        },
+                        "provider": "ollama",
+                        "model": model,
+                        "usage": usage,
                         "status": "ok",
                         "duration_ms": elapsed_ms,
                     },
@@ -315,14 +305,12 @@ class OllamaProvider:
                         "llm:response:debug",
                         {
                             "lvl": "DEBUG",
-                            "data": {
-                                "provider": "ollama",
-                                "response": {
-                                    "content_preview": content_preview,
-                                    "tool_calls": [{"tool": tc.tool, "id": tc.id} for tc in tool_calls]
-                                    if tool_calls
-                                    else [],
-                                },
+                            "provider": "ollama",
+                            "response": {
+                                "content_preview": content_preview,
+                                "tool_calls": [{"tool": tc.tool, "id": tc.id} for tc in tool_calls]
+                                if tool_calls
+                                else [],
                             },
                             "status": "ok",
                             "duration_ms": elapsed_ms,
@@ -433,11 +421,9 @@ class OllamaProvider:
             await self.coordinator.hooks.emit(
                 "llm:request",
                 {
-                    "data": {
-                        "provider": "ollama",
-                        "model": model,
-                        "message_count": len(ollama_messages),
-                    }
+                    "provider": "ollama",
+                    "model": model,
+                    "message_count": len(ollama_messages),
                 },
             )
 
@@ -447,13 +433,11 @@ class OllamaProvider:
                     "llm:request:debug",
                     {
                         "lvl": "DEBUG",
-                        "data": {
-                            "provider": "ollama",
-                            "request": {
-                                "model": model,
-                                "messages": ollama_messages,
-                                "options": params["options"],
-                            },
+                        "provider": "ollama",
+                        "request": {
+                            "model": model,
+                            "messages": ollama_messages,
+                            "options": params["options"],
                         },
                     },
                 )
@@ -480,11 +464,9 @@ class OllamaProvider:
                 await self.coordinator.hooks.emit(
                     "llm:response",
                     {
-                        "data": {
-                            "provider": "ollama",
-                            "model": model,
-                            "usage": usage_info,
-                        },
+                        "provider": "ollama",
+                        "model": model,
+                        "usage": usage_info,
                         "status": "ok",
                         "duration_ms": elapsed_ms,
                     },
@@ -499,11 +481,9 @@ class OllamaProvider:
                         "llm:response:debug",
                         {
                             "lvl": "DEBUG",
-                            "data": {
-                                "provider": "ollama",
-                                "response": {
-                                    "content_preview": content_preview,
-                                },
+                            "provider": "ollama",
+                            "response": {
+                                "content_preview": content_preview,
                             },
                             "status": "ok",
                             "duration_ms": elapsed_ms,
