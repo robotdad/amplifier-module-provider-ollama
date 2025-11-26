@@ -8,6 +8,7 @@ import os
 import time
 from typing import Any
 
+from amplifier_core import ConfigField
 from amplifier_core import ModelInfo
 from amplifier_core import ModuleCoordinator
 from amplifier_core import ProviderInfo
@@ -103,6 +104,25 @@ class OllamaProvider:
                 "temperature": 0.7,
                 "timeout": 300.0,
             },
+            config_fields=[
+                ConfigField(
+                    id="host",
+                    display_name="Ollama Host",
+                    field_type="text",
+                    prompt="Enter Ollama server URL",
+                    env_var="OLLAMA_HOST",
+                    default="http://localhost:11434",
+                    required=False,
+                ),
+                ConfigField(
+                    id="auto_pull",
+                    display_name="Auto-Pull Models",
+                    field_type="boolean",
+                    prompt="Automatically pull missing models?",
+                    default="false",
+                    required=False,
+                ),
+            ],
         )
 
     async def list_models(self) -> list[ModelInfo]:
@@ -114,17 +134,19 @@ class OllamaProvider:
         try:
             response = await self.client.list()
             models = []
-            for model in response.get("models", []):
-                model_name = model.get("name", "")
+            # response.models is a list of Model objects with .model attribute (not .name)
+            for model in response.models:
+                model_name = model.model  # Model objects use .model, not .name
                 if model_name:
-                    # Extract details from model info
-                    details = model.get("details", {})
+                    # Extract details - model.details is a ModelDetails object
+                    details = model.details
+                    context_length = getattr(details, "context_length", None) or 4096
                     models.append(
                         ModelInfo(
                             id=model_name,
                             display_name=model_name,
-                            context_window=details.get("context_length", 4096),
-                            max_output_tokens=details.get("context_length", 4096),
+                            context_window=context_length,
+                            max_output_tokens=context_length,
                             capabilities=["tools", "streaming", "local"],
                             defaults={"temperature": 0.7, "max_tokens": 4096},
                         )
