@@ -52,23 +52,23 @@ providers:
 
 ### Prerequisites
 
-#### Option 1: Automated Installation (Recommended)
+#### Installation
 
-Use the provided installer script:
+1. **Install Ollama**: Download from https://ollama.ai or use:
+   ```bash
+   # Linux
+   curl -fsSL https://ollama.com/install.sh | sh
 
-```bash
-# Install Ollama and pull default model
-./scripts/install-ollama.sh --pull-model llama3.2:3b
+   # macOS (with Homebrew)
+   brew install ollama
+   ```
 
-# Or install Ollama only
-./scripts/install-ollama.sh
-```
+2. **Pull a model**:
+   ```bash
+   ollama pull llama3.2:3b
+   ```
 
-#### Option 2: Manual Installation
-
-1. Install Ollama: https://ollama.ai
-2. Pull a model: `ollama pull llama3.2:3b`
-3. Start Ollama server (usually automatic)
+3. **Start Ollama server** (usually starts automatically after installation)
 
 ### Configuration File
 
