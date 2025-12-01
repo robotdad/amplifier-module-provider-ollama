@@ -18,10 +18,53 @@ from amplifier_core.message_models import ChatRequest
 from amplifier_core.message_models import ChatResponse
 from amplifier_core.message_models import Message
 from amplifier_core.message_models import ToolCall
+
 from ollama import AsyncClient
 from ollama import ResponseError
 
 logger = logging.getLogger(__name__)
+
+
+class OllamaChatResponse(ChatResponse):
+    """Extended ChatResponse with Ollama-specific metadata."""
+
+    raw_response: dict[str, Any] | None = None
+    model_name: str | None = None
+    thinking_content: str | None = None
+
+
+def _truncate_values(
+    obj: Any,
+    max_length: int = 200,
+    max_depth: int = 10,
+    _depth: int = 0,
+) -> Any:
+    """Truncate long strings in nested structures for logging.
+
+    Args:
+        obj: Object to truncate (dict, list, str, or other)
+        max_length: Maximum length for strings before truncation
+        max_depth: Maximum recursion depth
+        _depth: Current recursion depth (internal)
+
+    Returns:
+        Truncated copy of the object
+    """
+    if _depth > max_depth:
+        return "..."
+
+    if isinstance(obj, str):
+        if len(obj) > max_length:
+            return obj[:max_length] + f"... ({len(obj)} chars)"
+        return obj
+    if isinstance(obj, dict):
+        return {k: _truncate_values(v, max_length, max_depth, _depth + 1) for k, v in obj.items()}
+    if isinstance(obj, list):
+        if len(obj) > 10:
+            truncated = [_truncate_values(item, max_length, max_depth, _depth + 1) for item in obj[:10]]
+            return truncated + [f"... ({len(obj)} items total)"]
+        return [_truncate_values(item, max_length, max_depth, _depth + 1) for item in obj]
+    return obj
 
 
 async def mount(coordinator: ModuleCoordinator, config: dict[str, Any] | None = None):
